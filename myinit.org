@@ -21,6 +21,7 @@
 (setq initial-scratch-message ";; scratch buffer\n")
 (setq column-number-mode t)
 (setq size-indication-mode t)
+(setq ad-redefinition-action 'accept)
 #+END_SRC
 * Transparency
 #+BEGIN_SRC emacs-lisp
