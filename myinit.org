@@ -137,9 +137,9 @@
   (add-hook 'python-mode-hook 'my/python-mode-hook)
 
   ;; ;; ;; company box mode
-  ;; ;; (use-package company-box
-  ;; ;;   :ensure t
-  ;; ;;   :hook (company-mode . company-box-mode)) 
+  (use-package company-box
+  :ensure t
+  :hook (company-mode . company-box-mode)) 
 #+END_SRC
 * All the icons
 #+BEGIN_SRC emacs-lisp
@@ -203,6 +203,8 @@
     :ensure t
     :init
     (yas-global-mode 1))
+  (use-package yasnippet-snippets
+    :ensure t)
 #+END_SRC
 * Undo Tree
 #+BEGIN_SRC emacs-lisp
@@ -219,11 +221,7 @@
     :ensure t
     :config
     (global-hungry-delete-mode))
-  ; flashes the cursor's line when you scroll
-  (use-package beacon
-    :ensure t
-    :config
-    (beacon-mode 1))
+
   (use-package multiple-cursors
     :ensure t)
 
@@ -464,9 +462,6 @@
 #+BEGIN_SRC emacs-lisp
   (use-package dictionary
     :ensure t)
-
-  (use-package synosaurus
-    :ensure t)
 #+END_SRC
 * Racket
 #+BEGIN_SRC emacs-lisp
@@ -474,5 +469,16 @@
     :ensure t
     :config
     (setq tab-always-indent 'complete))
+
+#+END_SRC
+* Flash modeline instead of bell
+#+BEGIN_SRC emacs-lisp
+(setq ring-bell-function
+      (lambda ()
+        (let ((orig-fg (face-foreground 'mode-line)))
+          (set-face-foreground 'mode-line "#F2804F")
+          (run-with-idle-timer 0.1 nil
+                               (lambda (fg) (set-face-foreground 'mode-line fg))
+                               orig-fg))))
 
 #+END_SRC
