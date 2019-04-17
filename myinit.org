@@ -10,7 +10,7 @@
 (setq inhibit-startup-message t)
 (tool-bar-mode -1)
 (fset 'yes-or-no-p 'y-or-n-p)
-(global-set-key (kbd "<f5>") 'revert-buffer)
+(global-set-key (kbd "<f6>") 'revert-buffer)
 (recentf-mode 1)
 (delete-selection-mode 1)
 (add-hook 'emacs-lisp-mode-hook 'show-paren-mode)
@@ -216,51 +216,58 @@
 #+END_SRC
 * Misc packages
 #+BEGIN_SRC emacs-lisp
-  ; Highlights the current cursor line
-  (global-hl-line-mode t)
-  (use-package hungry-delete
-    :ensure t
-    :config
-    (global-hungry-delete-mode))
+    ; Highlights the current cursor line
+    (global-hl-line-mode t)
 
-  (use-package multiple-cursors
-    :ensure t)
+    ; flashes the cursor's line when you scroll
+    (use-package beacon
+      :ensure t
+      :config
+      (beacon-mode 1))
 
-  (setq save-interprogram-paste-before-kill t)
+    (use-package hungry-delete
+      :ensure t
+      :config
+      (global-hungry-delete-mode))
 
-  (global-auto-revert-mode 1) ;; you might not want this
-  (setq auto-revert-verbose nil) ;; or this
-  (global-set-key (kbd "<f5>") 'revert-buffer)
+    (use-package multiple-cursors
+      :ensure t)
 
-  ; if you're windened, narrow to the region, if you're narrowed, widen
-  ; bound to C-x n
-  (defun narrow-or-widen-dwim (p)
-    "If the buffer is narrowed, it widens. Otherwise, it narrows intelligently.
-    Intelligently means: region, org-src-block, org-subtree, or defun,
-    whichever applies first.
-    Narrowing to org-src-block actually calls `org-edit-src-code'.
+    (setq save-interprogram-paste-before-kill t)
 
-    With prefix P, don't widen, just narrow even if buffer is already
-    narrowed."
-    (interactive "P")
-    (declare (interactive-only))
-    (cond ((and (buffer-narrowed-p) (not p)) (widen))
-	  ((region-active-p)
-	   (narrow-to-region (region-beginning) (region-end)))
-	  ((derived-mode-p 'org-mode)
-	   ;; `org-edit-src-code' is not a real narrowing command.
-	   ;; Remove this first conditional if you don't want it.
-	   (cond ((ignore-errors (org-edit-src-code))
-		  (delete-other-windows))
-		 ((org-at-block-p)
-		  (org-narrow-to-block))
-		 (t (org-narrow-to-subtree))))
-	  (t (narrow-to-defun))))
+    (global-auto-revert-mode 1) ;; you might not want this
+    (setq auto-revert-verbose nil) ;; or this
+    (global-set-key (kbd "<f5>") 'revert-buffer)
 
-  ;; (define-key endless/toggle-map "n" #'narrow-or-widen-dwim)
-  ;; This line actually replaces Emacs' entire narrowing keymap, that's
-  ;; how much I like this command. Only copy it if that's what you want.
-  (define-key ctl-x-map "n" #'narrow-or-widen-dwim)
+    ; if you're windened, narrow to the region, if you're narrowed, widen
+    ; bound to C-x n
+    (defun narrow-or-widen-dwim (p)
+      "If the buffer is narrowed, it widens. Otherwise, it narrows intelligently.
+      Intelligently means: region, org-src-block, org-subtree, or defun,
+      whichever applies first.
+      Narrowing to org-src-block actually calls `org-edit-src-code'.
+
+      With prefix P, don't widen, just narrow even if buffer is already
+      narrowed."
+      (interactive "P")
+      (declare (interactive-only))
+      (cond ((and (buffer-narrowed-p) (not p)) (widen))
+	    ((region-active-p)
+	     (narrow-to-region (region-beginning) (region-end)))
+	    ((derived-mode-p 'org-mode)
+	     ;; `org-edit-src-code' is not a real narrowing command.
+	     ;; Remove this first conditional if you don't want it.
+	     (cond ((ignore-errors (org-edit-src-code))
+		    (delete-other-windows))
+		   ((org-at-block-p)
+		    (org-narrow-to-block))
+		   (t (org-narrow-to-subtree))))
+	    (t (narrow-to-defun))))
+
+    ;; (define-key endless/toggle-map "n" #'narrow-or-widen-dwim)
+    ;; This line actually replaces Emacs' entire narrowing keymap, that's
+    ;; how much I like this command. Only copy it if that's what you want.
+    (define-key ctl-x-map "n" #'narrow-or-widen-dwim)
 #+END_SRC
 
 * DIRED
@@ -370,4 +377,101 @@
                                (lambda (fg) (set-face-foreground 'mode-line fg))
                                orig-fg))))
 
+#+END_SRC
+* Web Mode
+#+BEGIN_SRC emacs-lisp
+    (use-package web-mode
+      :ensure t
+      :config
+	   (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+	   (add-to-list 'auto-mode-alist '("\\.vue?\\'" . web-mode))
+	   (setq web-mode-engines-alist
+		 '(("django"    . "\\.html\\'")))
+	   (setq web-mode-ac-sources-alist
+	   '(("css" . (ac-source-css-property))
+	   ("vue" . (ac-source-words-in-buffer ac-source-abbrev))
+           ("html" . (ac-source-words-in-buffer ac-source-abbrev))))
+  (setq web-mode-enable-auto-closing t))
+  (setq web-mode-enable-auto-quoting t) ; this fixes the quote problem I mentioned
+
+
+#+END_SRC
+
+#+RESULTS:
+: t
+* Emmet mode
+#+BEGIN_SRC emacs-lisp
+(use-package emmet-mode
+:ensure t
+:config
+(add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
+(add-hook 'web-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
+(add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
+)
+#+END_SRC
+* Javascript
+#+BEGIN_SRC emacs-lisp
+(use-package js2-mode
+:ensure t
+:ensure ac-js2
+:init
+(progn
+(add-hook 'js-mode-hook 'js2-minor-mode)
+(add-hook 'js2-mode-hook 'ac-js2-mode)
+))
+
+(use-package js2-refactor
+:ensure t
+:config 
+(progn
+(js2r-add-keybindings-with-prefix "C-c C-m")
+;; eg. extract function with `C-c C-m ef`.
+(add-hook 'js2-mode-hook #'js2-refactor-mode)))
+(use-package tern
+:ensure t
+:ensure tern
+:ensure tern-auto-complete
+:config
+(progn
+(add-hook 'js-mode-hook (lambda () (tern-mode t)))
+(add-hook 'js2-mode-hook (lambda () (tern-mode t)))
+(add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+;;(tern-ac-setup)
+))
+
+;;(use-package jade
+;;:ensure t
+;;)
+
+;; use web-mode for .jsx files
+(add-to-list 'auto-mode-alist '("\\.jsx$" . web-mode))
+
+
+;; turn on flychecking globally
+(add-hook 'after-init-hook #'global-flycheck-mode)
+
+;; disable jshint since we prefer eslint checking
+(setq-default flycheck-disabled-checkers
+  (append flycheck-disabled-checkers
+    '(javascript-jshint)))
+
+;; use eslint with web-mode for jsx files
+(flycheck-add-mode 'javascript-eslint 'web-mode)
+
+;; customize flycheck temp file prefix
+(setq-default flycheck-temp-prefix ".flycheck")
+
+;; disable json-jsonlist checking for json files
+(setq-default flycheck-disabled-checkers
+  (append flycheck-disabled-checkers
+    '(json-jsonlist)))
+
+;; adjust indents for web-mode to 2 spaces
+(defun my-web-mode-hook ()
+  "Hooks for Web mode. Adjust indents"
+  ;;; http://web-mode.org/
+  (setq web-mode-markup-indent-offset 2)
+  (setq web-mode-css-indent-offset 2)
+  (setq web-mode-code-indent-offset 2))
+(add-hook 'web-mode-hook  'my-web-mode-hook)
 #+END_SRC
