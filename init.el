@@ -1,26 +1,27 @@
-(require 'package)
-(setq package-enable-at-startup nil)
-(add-to-list 'package-archives
-	     '("melpa" . "https://melpa.org/packages/"))
-(package-initialize)
+;;; init.el --- configuration entry point. -*- lexical-binding: t -*-
 
-;; Bootstrap `use-package'
-(unless (package-installed-p 'use-package)
-	(package-refresh-contents)
-	(package-install 'use-package))
+;;; Commentary:
 
-(org-babel-load-file (expand-file-name "~/.emacs.d/myinit.org"))
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages (quote (which-key try use-package)))
- '(tool-bar-mode nil))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(default ((t (:family "等距更纱黑体 SC" :foundry "outline" :slant normal :weight normal :height 141 :width normal))))
- '(aw-leading-char-face ((t (:inherit ace-jump-face-foreground :height 3.0)))))
+;; set up global settings and load other files.
+
+;;; Code:
+
+;; Add 'lisp' folder into path.
+(add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+(require 'init-benchmarking) ;; Measure startup time
+
+;; Adjust garbage collection thresholds during startup, and thereafter
+(let ((normal-gc-cons-threshold (* 20 1024 1024))
+      (init-gc-cons-threshold (* 128 1024 1024)))
+  (setq gc-cons-threshold init-gc-cons-threshold)
+  (add-hook 'emacs-startup-hook
+            (lambda () (setq gc-cons-threshold normal-gc-cons-threshold))))
+
+;; load modules
+(require 'init-packages)
+(require 'init-ui)
+(require 'init-editor)
+
+(provide 'init)
+;;; init.el ends here
