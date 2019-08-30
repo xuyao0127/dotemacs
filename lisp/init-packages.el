@@ -44,6 +44,9 @@
      '(aw-leading-char-face
        ((t (:inherit ace-jump-face-foreground :height 3.0)))))))
 
+;; all the icons
+(use-package all-the-icons)
+
 ;; avy for navigation
 (use-package avy
   :bind ("M-s" . avy-goto-char))
@@ -142,7 +145,7 @@
   ;; Enable flashing mode-line on errors
   (doom-themes-visual-bell-config)
 
-  ;; Enable custom neotree theme (all-the-icons must be installed!)
+  ;; Enable custom neotreetheme (all-the-icons must be installed!)
   (doom-themes-neotree-config)
 
   ;; Corrects (and improves) org-mode's native fontification.
@@ -198,6 +201,13 @@
 (use-package move-text
   :config
   (move-text-default-bindings))
+
+;; neotree
+(use-package neotree
+  :bind ([f8] . 'neotree-toggle)
+  :config
+  (setq neo-window-fixed-size nil)
+  (setq-default neo-autorefresh t))
 
 ;; operate on number
 (use-package operate-on-number)

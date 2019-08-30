@@ -2,7 +2,7 @@
 ;;; Commentary:
 ;;; Code:
 
-(set-frame-font "Fira Code 14")
+(set-frame-font "Sarasa Mono SC 16")
 (setq use-file-dialog nil)
 (setq use-dialog-box nil)
 (tool-bar-mode -1)
