@@ -121,7 +121,7 @@
    '(diff-hl-insert ((t (:background "#7ccd7c" :foreground "#7ccd7c")))))
   :hook
   (after-init . global-diff-hl-mode)
-  ;; (after-init . diff-hl-flydiff-mode)
+  (after-init . diff-hl-flydiff-mode)
   (dired-mode . diff-hl-dired-mode))
 ;; modeline
 (use-package doom-modeline
