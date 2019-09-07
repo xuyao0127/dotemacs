@@ -250,6 +250,11 @@
   :bind (("M-x" . smex)
          ("M-X" . smex-major-mode-commands)
          ("C-c C-c M-x" . execute-extended-command)))
+
+;; SML mode
+(use-package sml-mode
+  :ensure t)
+
 ;; super-save
 (use-package super-save
   :config
@@ -289,10 +294,6 @@
 ;; racket
 (use-package racket-mode
   :mode "\\.rkt\\'")
-
-;; ocaml
-(use-package tuareg
-  :mode "\\.ml\\'")
 
 ;; python
 (use-package anaconda-mode
