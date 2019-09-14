@@ -30,6 +30,12 @@
 (require 'use-package-ensure)
 (setq use-package-always-ensure t)
 
+
+(use-package benchmark-init
+  :config
+  ;; To disable collection of benchmark data after init is done.
+  (add-hook 'after-init-hook 'benchmark-init/deactivate))
+
 ;; setup packages
 
 ;; Ace windows for each windows switching
@@ -103,7 +109,6 @@
 
 ;; scale fonts
 (use-package default-text-scale
-  :ensure t
   :config
   (global-set-key (kbd "C-M-=") 'default-text-scale-increase)
   (global-set-key (kbd "C-M--") 'default-text-scale-decrease))
@@ -219,12 +224,10 @@
 
 ;; PDF-tools
 (use-package pdf-tools
-  :ensure t
   :mode ("\\.pdf\\'" . pdf-view-mode))
 
 ;; projectile
 (use-package projectile
-  :ensure t
   :bind ("C-c p" . projectile-command-map)
   :config
   (projectile-mode)
@@ -232,7 +235,6 @@
 
 ;; rainbow parens
 (use-package rainbow-delimiters
-  :ensure t
   :hook (prog-mode . rainbow-delimiters-mode))
 
 ;; scratch: create scratch buffer with same modes
@@ -258,7 +260,6 @@
 
 ;; SML mode
 (use-package sml-mode
-  :ensure t
   :mode
   ("\\.sml\\'" . 'sml-mode)
   ("\\.lex\\'" . 'sml-lex-mode))
@@ -279,7 +280,6 @@
 
 ;; undo-tree
 (use-package undo-tree
-    :ensure t
     :init
     (global-undo-tree-mode)
     :config
@@ -295,7 +295,7 @@
 
 ;; youdao dictionary
 (use-package youdao-dictionary
-  :ensure t
+  :defer 3
   :init
   (setq url-automatic-caching t)
   :bind ("C-c y" . 'youdao-dictionary-search-at-point))
