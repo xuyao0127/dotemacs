@@ -253,7 +253,10 @@
 
 ;; SML mode
 (use-package sml-mode
-  :ensure t)
+  :ensure t
+  :mode
+  ("\\.sml\\'" . 'sml-mode)
+  ("\\.lex\\'" . 'sml-mode))
 
 ;; super-save
 (use-package super-save
@@ -284,6 +287,13 @@
 (use-package which-key
   :config
   (which-key-mode 1))
+
+;; youdao dictionary
+(use-package youdao-dictionary
+  :ensure t
+  :init
+  (setq url-automatic-caching t)
+  :bind ("C-c y" . 'youdao-dictionary-search-at-point))
 
 ;; zop-to-char
 (use-package zop-to-char
