@@ -126,7 +126,7 @@
    '(diff-hl-insert ((t (:background "#7ccd7c" :foreground "#7ccd7c")))))
   :hook
   (after-init . global-diff-hl-mode)
-  (after-init . diff-hl-flydiff-mode)
+  ;; (after-init . diff-hl-flydiff-mode)
   (dired-mode . diff-hl-dired-mode))
 ;; modeline
 (use-package doom-modeline
@@ -173,17 +173,6 @@
 (use-package magit
   :bind ("C-x g". magit-status))
 
-;; google-this
-(use-package google-this
-  :config
-  (google-this-mode 1))
-
-;; google-translate
-(use-package google-translate
-  :requires google-translate-default-ui
-  :bind (("C-c t" . google-translate-at-point)
-         ("C-c T" . google-translate-query-translate)))
-
 ;; hl-todo: highlight todos
 (use-package hl-todo
   :config
@@ -205,13 +194,11 @@
 
 ;; neotree
 (use-package neotree
-  :bind ([f8] . 'neotree-toggle)
+  :defer 3
+  :bind ("C-c n" . 'neotree-toggle)
   :config
   (setq neo-window-fixed-size nil)
   (setq-default neo-autorefresh t))
-
-;; operate on number
-(use-package operate-on-number)
 
 ;; org mode related packages
 (use-package org
