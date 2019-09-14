@@ -1,7 +1,6 @@
 ;;; init-ui.el --- ui configurations
 ;;; Commentary:
 ;;; Code:
-(set-frame-font "Sarasa Mono SC 16")
 (setq use-file-dialog nil)
 (setq use-dialog-box nil)
 (tool-bar-mode -1)
@@ -13,6 +12,9 @@
 (recentf-mode 1)
 (set-language-environment "UTF-8")
 (setq initial-scratch-message ";; scratch buffer\n")
+(let ((no-border '(internal-border-width . 0)))
+  (add-to-list 'default-frame-alist no-border)
+  (add-to-list 'initial-frame-alist no-border))
 
 ;; nice scrolling
 (setq scroll-margin 0
