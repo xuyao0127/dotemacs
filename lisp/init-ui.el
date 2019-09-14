@@ -1,8 +1,8 @@
 ;;; init-ui.el --- ui configurations
 ;;; Commentary:
 ;;; Code:
-;;(set-frame-font "Sarasa Mono SC 16")
-(set-frame-font "Fira Code 16")
+(set-frame-font "Sarasa Mono SC 16")
+;; (set-frame-font "Fira Code retina  16")
 (setq use-file-dialog nil)
 (setq use-dialog-box nil)
 (tool-bar-mode -1)
@@ -28,7 +28,7 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 
 (global-hl-line-mode t)
-(global-display-line-numbers-mode)
+(add-hook 'prog-mode-hook 'display-line-numbers-mode)
 
 (provide 'init-ui)
 ;;; init-ui.el ends here
