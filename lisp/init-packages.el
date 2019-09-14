@@ -217,6 +217,11 @@
   :config
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 
+;; PDF-tools
+(use-package pdf-tools
+  :ensure t
+  :mode ("\\.pdf\\'" . pdf-view-mode))
+
 ;; projectile
 (use-package projectile
   :ensure t
