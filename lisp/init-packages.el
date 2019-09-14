@@ -261,7 +261,7 @@
   :ensure t
   :mode
   ("\\.sml\\'" . 'sml-mode)
-  ("\\.lex\\'" . 'sml-mode))
+  ("\\.lex\\'" . 'sml-lex-mode))
 
 ;; super-save
 (use-package super-save
