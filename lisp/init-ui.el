@@ -1,6 +1,7 @@
 ;;; init-ui.el --- ui configurations
 ;;; Commentary:
 ;;; Code:
+(set-fontset-font t 'han (font-spec :family "Sarasa Mono SC" :size 16)
 (setq use-file-dialog nil)
 (setq use-dialog-box nil)
 (tool-bar-mode -1)
