@@ -3,23 +3,10 @@
 ;;; Code:
 (setq package-enable-at-startup nil)
 (require 'package)
- (let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
-                     (not (gnutls-available-p))))
-        (proto (if no-ssl "http" "https")))
-   (when no-ssl
-     (warn "\
- Your version of Emacs does not support SSL connections,
- which is unsafe because it allows man-in-the-middle attacks.
- There are two things you can do about this warning:
- 1. Install an Emacs version that does support SSL and be safe.
- 2. Remove this warning from your init file so you won't see it again."))
-   ;; Comment/uncomment these two lines to enable/disable MELPA and MELPA Stable as desired
-   (add-to-list 'package-archives (cons "melpa" (concat proto "://melpa.org/packages/")) t)
-   (add-to-list 'package-archives (cons "melpa-stable" (concat proto "://stable.melpa.org/packages/")) t)
-   (add-to-list 'package-archives (cons "org" (concat proto "://orgmode.org/elpa/")) t)
-   (when (< emacs-major-version 24)
-     ;; For important compatibility libraries like cl-lib
-     (add-to-list 'package-archives (cons "gnu" (concat proto "://elpa.gnu.org/packages/")))))
+(setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
+                         ("melpa" . "https://melpa.org/packages/")
+                         ("org" . "http://orgmode.org/elpa/")))
+(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 (package-initialize)
 
 ;; Bootstrap `use-package'
@@ -97,7 +84,7 @@
   :bind (("C-s" . swiper-isearch)
          ("C-r" . swiper-isearch)
          ("C-c C-r" . ivy-resume)
-         ;; ("M-x" . counsel-M-x)
+         ("M-x" . counsel-M-x)
          ("C-x C-f" . counsel-find-file))
   :config
   (progn
@@ -230,8 +217,7 @@
   (show-smartparens-global-mode t)
   (require 'smartparens-config))
 
-(use-package amx
-  :bind ("<remap> <execute-extended-command>" . amx))
+(use-package smex)
 
 ;; super-save
 (use-package super-save
