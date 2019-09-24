@@ -141,7 +141,7 @@
 
   ;; Load the theme (doom-one, doom-molokai, etc); keep in mind that each theme
   ;; may have their own settings.
-  (load-theme 'doom-nord t)
+  (load-theme 'doom-one t)
 
   ;; Enable flashing mode-line on errors
   (doom-themes-visual-bell-config)
@@ -194,7 +194,7 @@
 
 ;; neotree
 (use-package neotree
-  :defer 3
+  :defer 2
   :bind ("C-c n" . 'neotree-toggle)
   :config
   (setq neo-window-fixed-size nil)
@@ -262,9 +262,6 @@
   (setq super-save-remote-files nil)
   (setq auto-save-default nil))
 
-;; try: try packages temparorilly
-(use-package try)
-
 ;; undo-tree
 (use-package undo-tree
     :init
@@ -282,7 +279,7 @@
 
 ;; youdao dictionary
 (use-package youdao-dictionary
-  :defer 3
+  :defer t
   :init
   (setq url-automatic-caching t)
   :bind ("C-c y" . 'youdao-dictionary-search-at-point))
