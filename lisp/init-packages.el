@@ -66,6 +66,8 @@
 
 ;; Swiper/ Ivy/ Counsel
 (use-package counsel
+  :init
+  (counsel-mode 1)
   :bind
   (("M-y" . counsel-yank-pop)
    :map ivy-minibuffer-map
@@ -81,23 +83,22 @@
   (setq ivy-display-style 'fancy))
 
 (use-package swiper
-  :bind (("C-s" . swiper-isearch)
-         ("C-r" . swiper-isearch)
+  :bind (("C-s" . swiper)
+         ("C-r" . swiper)
          ("C-c C-r" . ivy-resume)
-         ("M-x" . counsel-M-x)
          ("C-x C-f" . counsel-find-file))
   :config
-  (progn
-    (ivy-mode 1)
-    (setq ivy-use-virtual-buffers t)
-    (setq ivy-display-style 'fancy)
-    (define-key read-expression-map (kbd "C-r") 'counsel-expression-history)))
+  (ivy-mode 1)
+  (setq ivy-use-virtual-buffers t)
+  (setq enable-recursive-minibuffers t))
 
 (use-package dashboard
   :config
   (dashboard-setup-startup-hook)
-  (setq dashboard-startup-banner 2)
+  (setq dashboard-startup-banner 1)
   (setq dashboard-center-content t)
+  (setq dashboard-set-heading-icons t)
+  (setq dashboard-set-file-icons t)
   (setq dashboard-items '((recents  . 5)
                         (bookmarks . 5)
                         (projects . 5))))
