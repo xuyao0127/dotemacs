@@ -30,7 +30,6 @@
 (require 'use-package-ensure)
 (setq use-package-always-ensure t)
 
-
 (use-package benchmark-init
   :config
   ;; To disable collection of benchmark data after init is done.
@@ -74,9 +73,9 @@
    ("C-n" . company-select-next)
    ("C-p" . company-select-previous)))
 
-;; ;; company box mode
-;; (use-package company-box
-;;   :hook (company-mode . company-box-mode))
+;; company box mode
+(use-package company-box
+  :hook (company-mode . company-box-mode))
 
 ;; Swiper/ Ivy/ Counsel
 (use-package counsel
@@ -98,7 +97,7 @@
   :bind (("C-s" . swiper-isearch)
          ("C-r" . swiper-isearch)
          ("C-c C-r" . ivy-resume)
-         ;;("M-x" . counsel-M-x)
+         ;; ("M-x" . counsel-M-x)
          ("C-x C-f" . counsel-find-file))
   :config
   (progn
@@ -107,15 +106,20 @@
     (setq ivy-display-style 'fancy)
     (define-key read-expression-map (kbd "C-r") 'counsel-expression-history)))
 
+(use-package dashboard
+  :config
+  (dashboard-setup-startup-hook)
+  (setq dashboard-startup-banner 2)
+  (setq dashboard-center-content t)
+  (setq dashboard-items '((recents  . 5)
+                        (bookmarks . 5)
+                        (projects . 5))))
+
 ;; scale fonts
 (use-package default-text-scale
   :config
   (global-set-key (kbd "C-M-=") 'default-text-scale-increase)
   (global-set-key (kbd "C-M--") 'default-text-scale-decrease))
-
-;; discover-my-major
-(use-package discover-my-major
-  :bind ("C-h C-m" . discover-my-major))
 
 ;; diff-hl
 (use-package diff-hl
@@ -126,8 +130,9 @@
    '(diff-hl-insert ((t (:background "#7ccd7c" :foreground "#7ccd7c")))))
   :hook
   (after-init . global-diff-hl-mode)
-  ;; (after-init . diff-hl-flydiff-mode)
+  (after-init . diff-hl-flydiff-mode)
   (dired-mode . diff-hl-dired-mode))
+
 ;; modeline
 (use-package doom-modeline
   :hook (after-init . doom-modeline-mode))
@@ -183,10 +188,6 @@
   :config
   (global-hungry-delete-mode))
 
-;; imenu-anywhere
-(use-package imenu-anywhere
-  :bind ("C-." . ivy-imenu-anywhere))
-
 ;; move-text
 (use-package move-text
   :config
@@ -199,15 +200,6 @@
   :config
   (setq neo-window-fixed-size nil)
   (setq-default neo-autorefresh t))
-
-;; org mode related packages
-(use-package org
-  :pin org
-  :mode ("\\.org\\'" . org-mode))
-(setenv "BROWSER" "firefox")
-(use-package org-bullets
-  :config
-  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 
 ;; PDF-tools
 (use-package pdf-tools
@@ -238,18 +230,8 @@
   (show-smartparens-global-mode t)
   (require 'smartparens-config))
 
-;; smex
-(use-package smex
-  :init (smex-initialize)
-  :bind (("M-x" . smex)
-         ("M-X" . smex-major-mode-commands)
-         ("C-c C-c M-x" . execute-extended-command)))
-
-;; SML mode
-(use-package sml-mode
-  :mode
-  ("\\.sml\\'" . 'sml-mode)
-  ("\\.lex\\'" . 'sml-lex-mode))
+(use-package amx
+  :bind ("<remap> <execute-extended-command>" . amx))
 
 ;; super-save
 (use-package super-save
@@ -284,15 +266,17 @@
   (setq url-automatic-caching t)
   :bind ("C-c y" . 'youdao-dictionary-search-at-point))
 
-;; zop-to-char
-(use-package zop-to-char
-  :bind ([remap zap-to-char] . zop-to-char))
-
 ;; programming modes
 
 ;; racket
 (use-package racket-mode
   :mode "\\.rkt\\'")
+
+;; SML mode
+(use-package sml-mode
+  :mode
+  ("\\.sml\\'" . 'sml-mode)
+  ("\\.lex\\'" . 'sml-lex-mode))
 
 ;; python
 (use-package anaconda-mode

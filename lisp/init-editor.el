@@ -28,17 +28,12 @@
 (setq auto-save-file-name-transforms
       `((".*" ,temporary-file-directory t)))
 
-(unless (memq system-type '(windows-nt ms-dos))
-  (progn
-    (require 'flyspell)
-    (setq ispell-program-name "aspell" ; use aspell instead of ispell
-          ispell-extra-args '("--sug-mode=ultra" "--lang=en_US"))
-    (add-hook 'text-mode-hook 'flyspell-mode +1)
-    (add-hook 'prog-mode-hook 'flyspell-prog-mode)))
 
-;; ediff - don't start another frame
-(require 'ediff)
-(setq ediff-window-setup-function 'ediff-setup-windows-plain)
+(require 'flyspell)
+(setq ispell-program-name "aspell" ; use aspell instead of ispell
+      ispell-extra-args '("--sug-mode=ultra" "--lang=en_US"))
+(add-hook 'text-mode-hook 'flyspell-mode +1)
+(add-hook 'prog-mode-hook 'flyspell-prog-mode)
 
 ;; clean up obsolete buffers automatically
 (require 'midnight)
