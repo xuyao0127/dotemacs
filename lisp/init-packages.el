@@ -36,13 +36,6 @@
 ;; all the icons
 (use-package all-the-icons)
 
-;; avy for navigation
-(use-package avy
-  :bind ("M-s" . avy-goto-char))
-
-;; show the cursor when moving after big movements in the window
-(use-package beacon)
-
 ;; company
 (use-package company
   :hook
@@ -59,10 +52,6 @@
    ("M-/" . company-other-backend)
    ("C-n" . company-select-next)
    ("C-p" . company-select-previous)))
-
-;; company box mode
-(use-package company-box
-  :hook (company-mode . company-box-mode))
 
 ;; Swiper/ Ivy/ Counsel
 (use-package counsel
@@ -83,10 +72,10 @@
   (setq ivy-display-style 'fancy))
 
 (use-package swiper
-  :bind (("C-s" . swiper)
-         ("C-r" . swiper)
-         ("C-c C-r" . ivy-resume)
-         ("C-x C-f" . counsel-find-file))
+  :bind
+  (("C-r" . swiper)
+   ("C-c C-r" . ivy-resume)
+   ("C-x C-f" . counsel-find-file))
   :config
   (ivy-mode 1)
   (setq ivy-use-virtual-buffers t)
@@ -103,12 +92,6 @@
                         (bookmarks . 5)
                         (projects . 5))))
 
-;; scale fonts
-(use-package default-text-scale
-  :config
-  (global-set-key (kbd "C-M-=") 'default-text-scale-increase)
-  (global-set-key (kbd "C-M--") 'default-text-scale-decrease))
-
 ;; diff-hl
 (use-package diff-hl
   :init
@@ -118,7 +101,7 @@
    '(diff-hl-insert ((t (:background "#7ccd7c" :foreground "#7ccd7c")))))
   :hook
   (after-init . global-diff-hl-mode)
-  (after-init . diff-hl-flydiff-mode)
+  ;; (after-init . diff-hl-flydiff-mode)
   (dired-mode . diff-hl-dired-mode))
 
 ;; modeline
@@ -145,41 +128,17 @@
   ;; Corrects (and improves) org-mode's native fontification.
   (doom-themes-org-config))
 
-;; easy-kill, add more options for M-w and mark
-(use-package easy-kill
-  :bind (([remap kill-ring-save] . easy-kill)
-         ([remap mark-sexp] . easy-mark)))
-
-;; expend-region
-(use-package expand-region
-  :bind ("C-=" . er/expand-region))
-
 ;; flycheck: check syntax on the fly
 (use-package flycheck
   :hook (prog-mode . flycheck-mode))
-
-;; git packages
-(use-package git-timemachine)
-(use-package gitconfig-mode)
-(use-package gitignore-mode)
-(use-package git-blamed)
-(use-package magit
-  :bind ("C-x g". magit-status))
 
 ;; hl-todo: highlight todos
 (use-package hl-todo
   :config
   (global-hl-todo-mode 1))
 
-;; hungry-delete
-(use-package hungry-delete
-  :config
-  (global-hungry-delete-mode))
-
 ;; move-text
-(use-package move-text
-  :config
-  (move-text-default-bindings))
+(use-package move-text :config (move-text-default-bindings))
 
 ;; neotree
 (use-package neotree
@@ -231,17 +190,6 @@
   (setq super-save-remote-files nil)
   (setq auto-save-default nil))
 
-;; undo-tree
-(use-package undo-tree
-    :init
-    (global-undo-tree-mode)
-    :config
-    ;; autosave the undo-tree history
-    (setq undo-tree-history-directory-alist
-          `((".*" . ,temporary-file-directory)))
-    (setq undo-tree-auto-save-history t))
-
-;; show available keybindings after you start typing
 (use-package which-key
   :config
   (which-key-mode 1))
@@ -252,6 +200,13 @@
   :init
   (setq url-automatic-caching t)
   :bind ("C-c y" . 'youdao-dictionary-search-at-point))
+
+;; xah fly keys
+(use-package xah-fly-keys
+  :config
+  (xah-fly-keys-set-layout "qwerty")
+  (xah-fly-keys 1)
+  (define-key key-translation-map (kbd "ESC") (kbd "C-g")))
 
 ;; programming modes
 
