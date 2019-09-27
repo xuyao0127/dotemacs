@@ -36,7 +36,7 @@
 (setq mouse-wheel-scroll-amount '(1 ((shift) . 1) ((control) . nil)))
 (setq mouse-wheel-progressive-speed nil)
 
-;; ;; transparency
+;; transparency
 ;; (set-frame-parameter (selected-frame) 'alpha '(90))
 ;; (defun toggle-transparency ()
 ;;    (interactive)

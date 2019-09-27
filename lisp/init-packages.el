@@ -150,7 +150,11 @@
 
 ;; PDF-tools
 (use-package pdf-tools
-  :mode ("\\.pdf\\'" . pdf-view-mode))
+  :mode ("\\.pdf\\'" . pdf-view-mode)
+  :defer t
+  :config
+  (setq mouse-wheel-follow-mouse t)
+  (setq pdf-view-resize-factor 1.10))
 
 ;; projectile
 (use-package projectile
@@ -245,6 +249,94 @@
 
 ;; use web-mode for .jsx files
 (add-to-list 'auto-mode-alist '("\\.jsx$" . web-mode))
+
+;; latex plugins
+(use-package tex-site
+  :ensure auctex
+  :mode ("\\.tex\\'" . latex-mode)
+  :config
+  (setq TeX-auto-save t)
+  (setq TeX-parse-self t)
+  (setq-default TeX-master nil)
+  (add-hook 'LaTeX-mode-hook
+            (lambda ()
+              (rainbow-delimiters-mode)
+              (company-mode)
+              (smartparens-mode)
+              (turn-on-reftex)
+              (setq reftex-plug-into-AUCTeX t)
+              (reftex-isearch-minor-mode)
+              (setq TeX-PDF-mode t)
+              (setq TeX-source-correlate-method 'synctex)
+              (setq TeX-source-correlate-start-server t)))
+
+;; Update PDF buffers after successful LaTeX runs
+(add-hook 'TeX-after-TeX-LaTeX-command-finished-hook
+           #'TeX-revert-document-buffer)
+
+;; to use pdfview with auctex
+(add-hook 'LaTeX-mode-hook 'pdf-tools-install)
+
+;; to use pdfview with auctex
+(setq TeX-view-program-selection '((output-pdf "pdf-tools"))
+       TeX-source-correlate-start-server t)
+(setq TeX-view-program-list '(("pdf-tools" "TeX-pdf-tools-sync-view"))))
+
+(use-package company-auctex
+  :defer t)
+
+(use-package ivy-bibtex
+  :ensure t
+  :bind ("C-c b b" . ivy-bibtex)
+  :config
+  (setq bibtex-completion-bibliography 
+        '("C:/Users/Nasser/OneDrive/Bibliography/references-zot.bib"))
+  (setq bibtex-completion-library-path 
+        '("C:/Users/Nasser/OneDrive/Bibliography/references-pdf"
+          "C:/Users/Nasser/OneDrive/Bibliography/references-etc"))
+
+  ;; using bibtex path reference to pdf file
+  (setq bibtex-completion-pdf-field "File")
+
+  ;;open pdf with external viwer foxit
+  (setq bibtex-completion-pdf-open-function
+        (lambda (fpath)
+          (call-process "C:\\Program Files (x86)\\Foxit Software\\Foxit Reader\\FoxitReader.exe" nil 0 nil fpath)))
+
+  (setq ivy-bibtex-default-action 'bibtex-completion-insert-citation))
+
+(use-package reftex
+  :ensure t
+  :defer t
+  :config
+  (setq reftex-cite-prompt-optional-args t)); Prompt for empty optional arguments in cite
+
+(use-package magic-latex-buffer
+  :hook (laxtex-mode-hook . magic-latex-buffer))
+
+(add-hook 'LaTeX-mode-hook ;this are the hooks I want to enable during LaTeX-mode
+
+	  (lambda()
+	    (company-auctex-init); start company latex
+	    (setq TeX-auto-save t) ;enable autosave on during LaTeX-mode
+	    (setq TeX-parse-self t) ; enable autoparsing
+	    (setq TeX-save-query nil) ; 
+	    (setq TeX-view-program-selection '((output-pdf "PDF Tools"))
+		  TeX-source-correlate-start-server t) ;use pdf-tools for default document view
+	    (setq TeX-source-correlate-method 'synctex) ; enable synctex
+            
+	    (setq TeX-source-correlate-mode t) ; enable text-source-correlate using synctex
+	    (setq-default TeX-master nil) 
+	    (global-set-key (kbd "C-c C-g") 'pdf-sync-forward-search) ;sync from text to pdf
+	    (add-hook 'TeX-after-compilation-finished-functions
+		      #'TeX-revert-document-buffer) ; reload pdf buffer
+	    (setq reftex-plug-into-AUCTeX t) ; enable auctex
+	    (setq reftex-bibliography-commands '("bibliography" "nobibliography" "addbibresource"))
+	    (local-set-key [C-tab] 'TeX-complete-symbol) ;tex complete symbol
+	    (turn-on-auto-fill) ; autofill enable for line breaks
+	    (setq-local company-backends
+                        (append '((company-math-symbols-latex company-latex-commands))
+                                company-backends))))
 
 (provide 'init-packages)
 ;;; init-packages.el ends here
