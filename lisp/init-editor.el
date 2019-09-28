@@ -29,14 +29,14 @@
       `((".*" ,temporary-file-directory t)))
 
 
-(require 'flyspell)
-(setq ispell-program-name "aspell" ; use aspell instead of ispell
-      ispell-extra-args '("--sug-mode=ultra" "--lang=en_US"))
-(add-hook 'text-mode-hook 'flyspell-mode +1)
-(add-hook 'prog-mode-hook 'flyspell-prog-mode)
+;; (require 'flyspell)
+;; (setq ispell-program-name "aspell" ; use aspell instead of ispell
+      ;; ispell-extra-args '("--sug-mode=ultra" "--lang=en_US"))
+;; (add-hook 'text-mode-hook 'flyspell-mode +1)
+;; (add-hook 'prog-mode-hook 'flyspell-prog-mode)
 
 ;; clean up obsolete buffers automatically
-(require 'midnight)
+;; (require 'midnight)
 
 (provide 'init-editor)
 ;;; init-editor.el ends here

@@ -73,7 +73,8 @@
 
 (use-package swiper
   :bind
-  (("C-r" . swiper)
+  (("C-s" . swiper)
+   ("C-r" . swiper)
    ("C-c C-r" . ivy-resume)
    ("C-x C-f" . counsel-find-file))
   :config
@@ -205,12 +206,8 @@
   (setq url-automatic-caching t)
   :bind ("C-c y" . 'youdao-dictionary-search-at-point))
 
-;; xah fly keys
-(use-package xah-fly-keys
-  :config
-  (xah-fly-keys-set-layout "qwerty")
-  (xah-fly-keys 1)
-  (define-key key-translation-map (kbd "ESC") (kbd "C-g")))
+
+(define-key key-translation-map (kbd "ESC") (kbd "C-g"))
 
 ;; programming modes
 
