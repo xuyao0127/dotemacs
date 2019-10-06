@@ -41,3 +41,12 @@
  '(diff-hl-change ((t (:background "#3a81c3" :foreground "#3a81c3"))))
  '(diff-hl-delete ((t (:background "#ee6363" :foreground "#ee6363"))))
  '(diff-hl-insert ((t (:background "#7ccd7c" :foreground "#7ccd7c")))))
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (magit git-blamed gitignore-mode gitconfig-mode git-timemachine youdao-dictionary which-key use-package undo-tree sml-mode smex smartparens rainbow-delimiters racket-mode projectile neotree minions lsp-ui hl-todo flycheck expand-region doom-themes doom-modeline diff-hl counsel company-lsp ace-window)))
+ '(sp-escape-quotes-after-insert nil t))

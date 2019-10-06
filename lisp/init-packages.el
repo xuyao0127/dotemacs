@@ -4,7 +4,6 @@
 (setq package-enable-at-startup nil)
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
-(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 
 (package-initialize)
 
@@ -106,6 +105,13 @@
 (use-package flycheck
   :hook (prog-mode . flycheck-mode))
 
+;; git packages
+(use-package git-timemachine)
+(use-package gitconfig-mode)
+(use-package gitignore-mode)
+(use-package git-blamed)
+(use-package magit
+  :bind ("C-x g". magit-status))
 
 ;; hl-todo: highlight todos
 (use-package hl-todo
