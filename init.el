@@ -48,5 +48,5 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (magit git-blamed gitignore-mode gitconfig-mode git-timemachine youdao-dictionary which-key use-package undo-tree sml-mode smex smartparens rainbow-delimiters racket-mode projectile neotree minions lsp-ui hl-todo flycheck expand-region doom-themes doom-modeline diff-hl counsel company-lsp ace-window)))
- '(sp-escape-quotes-after-insert nil t))
+    (dired-sidebar magit git-blamed gitignore-mode gitconfig-mode git-timemachine youdao-dictionary which-key use-package undo-tree sml-mode smex smartparens rainbow-delimiters racket-mode projectile neotree minions lsp-ui hl-todo flycheck expand-region doom-themes doom-modeline diff-hl counsel company-lsp ace-window)))
+ '(sp-escape-quotes-after-insert nil))

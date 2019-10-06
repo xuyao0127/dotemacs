@@ -15,14 +15,9 @@
 (require 'use-package-ensure)
 (setq use-package-always-ensure t)
 
-;; Ace windows for each windows switching
-(use-package ace-window
-  :init
-  (progn
-    (global-set-key [remap other-window] 'ace-window)
-    (custom-set-faces
-     '(aw-leading-char-face
-       ((t (:inherit ace-jump-face-foreground :height 3.0)))))))
+;; winum
+(use-package winum
+  :config (winum-mode))
 
 (use-package company
   :hook
@@ -67,6 +62,13 @@
   (ivy-mode 1)
   (setq ivy-use-virtual-buffers t)
   (setq enable-recursive-minibuffers t))
+
+;; neotree
+(use-package neotree
+  :bind ("C-c n" . neotree-toggle)
+  :config
+  (setq neo-autorefresh t)
+  (setq neo-window-fixed-size nil))
 
 ;; diff-hl
 (use-package diff-hl
@@ -114,16 +116,6 @@
 (use-package hl-todo
   :config
   (global-hl-todo-mode 1))
-
-;; neotree
-(use-package neotree
-  :defer 2
-  :bind ("C-c n" . 'neotree-toggle)
-  :config
-  (setq neo-vc-integration nil)
-  (setq neo-theme 'arrow)
-  (setq neo-window-fixed-size nil)
-  (setq-default neo-autorefresh t))
 
 ;; projectile
 (use-package projectile
