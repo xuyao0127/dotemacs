@@ -111,7 +111,8 @@
 (use-package gitignore-mode)
 (use-package git-blamed)
 (use-package magit
-  :bind ("C-x g". magit-status))
+  :bind ("C-x g". magit-status)
+  :config (setenv "SSH_ASKPASS" "git-gui--askpass"))
 
 ;; hl-todo: highlight todos
 (use-package hl-todo
