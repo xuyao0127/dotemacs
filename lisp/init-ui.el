@@ -11,7 +11,7 @@
 (setq inhibit-startup-screen t)
 (recentf-mode 1)
 (set-language-environment "UTF-8")
-(setq initial-scratch-message ";; scratch buffer\n")
+(setq initial-scratch-message ";; scratch\n")
 (let ((no-border '(internal-border-width . 0)))
   (add-to-list 'default-frame-alist no-border)
   (add-to-list 'initial-frame-alist no-border))
@@ -32,6 +32,8 @@
 
 (global-hl-line-mode t)
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
-
+;; (use-package nord-theme
+;;   :config
+;;   (load-theme 'nord t))
 (provide 'init-ui)
 ;;; init-ui.el ends here

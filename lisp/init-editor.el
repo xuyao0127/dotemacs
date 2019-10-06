@@ -30,8 +30,6 @@
       `((".*" ,temporary-file-directory t)))
 
 (add-hook 'after-init-hook 'global-auto-revert-mode)
-(setq global-auto-revert-non-file-buffers t
-      auto-revert-verbose nil)
 
 ;; clean up obsolete buffers automatically
 (require 'midnight)

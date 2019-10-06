@@ -3,8 +3,7 @@
 ;;; Code:
 (setq package-enable-at-startup nil)
 (require 'package)
-(setq package-archives '(("gnu" . "http://mirrors.163.com/elpa/gnu/")
-                         ("melpa" . "https://melpa.org/packages/")))
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 
 (package-initialize)
@@ -17,8 +16,6 @@
 (require 'use-package-ensure)
 (setq use-package-always-ensure t)
 
-;; setup packages
-
 ;; Ace windows for each windows switching
 (use-package ace-window
   :init
@@ -28,10 +25,6 @@
      '(aw-leading-char-face
        ((t (:inherit ace-jump-face-foreground :height 3.0)))))))
 
-;; all the icons
-(use-package all-the-icons)
-
-;; company
 (use-package company
   :hook
   (after-init . global-company-mode)
@@ -58,7 +51,6 @@
    ("M-y" . ivy-next-line)))
 
 (use-package ivy
-  :diminish (ivy-mode)
   :bind (("C-x b" . ivy-switch-buffer))
   :config
   (ivy-mode 1)
@@ -77,17 +69,6 @@
   (setq ivy-use-virtual-buffers t)
   (setq enable-recursive-minibuffers t))
 
-;; (use-package dashboard
-;;   :config
-;;   (dashboard-setup-startup-hook)
-;;   (setq dashboard-startup-banner 1)
-;;   (setq dashboard-center-content t)
-;;   (setq dashboard-set-heading-icons t)
-;;   (setq dashboard-set-file-icons t)
-;;   (setq dashboard-items '((recents  . 5)
-;;                         (bookmarks . 5)
-;;                         (projects . 5))))
-
 ;; diff-hl
 (use-package diff-hl
   :init
@@ -101,8 +82,11 @@
   (dired-mode . diff-hl-dired-mode))
 
 ;; modeline
+(setq inhibit-compacting-font-caches t)
 (use-package doom-modeline
-  :hook (after-init . doom-modeline-mode))
+  :hook (after-init . doom-modeline-mode)
+  :config
+  (setq doom-modeline-icon nil))
 
 ;; theme
 (use-package doom-themes
@@ -110,27 +94,17 @@
   ;; Global settings (defaults)
   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
         doom-themes-enable-italic t) ; if nil, italics is universally disabled
-
-  ;; Load the theme (doom-one, doom-molokai, etc); keep in mind that each theme
-  ;; may have their own settings.
-  (load-theme 'doom-one t)
-
+  (load-theme 'doom-nord t)
   ;; Enable flashing mode-line on errors
-  (doom-themes-visual-bell-config)
-
-  ;; Enable custom neotreetheme (all-the-icons must be installed!)
-  (doom-themes-neotree-config)
-
-  ;; Corrects (and improves) org-mode's native fontification.
-  (doom-themes-org-config))
+  (doom-themes-visual-bell-config))
 
 ;;expand selction
 (use-package expand-region
   :bind ("C-=" . er/expand-region))
 
-;; ;; flycheck: check syntax on the fly
-;; (use-package flycheck
-;;   :hook (prog-mode . flycheck-mode))
+;; flycheck: check syntax on the fly
+(use-package flycheck
+  :hook (prog-mode . flycheck-mode))
 
 
 ;; hl-todo: highlight todos
@@ -140,18 +114,19 @@
 
 ;; neotree
 (use-package neotree
-  :defer 2
   :bind ("C-c n" . 'neotree-toggle)
   :config
+  (setq neo-vc-integration nil)
+  (setq neo-theme 'arrow)
   (setq neo-window-fixed-size nil)
   (setq-default neo-autorefresh t))
 
-;; ;; projectile
-;; (use-package projectile
-;;   :bind ("C-c p" . projectile-command-map)
-;;   :config
-;;   (projectile-mode)
-;;   (setq projectile-completion-system 'ivy))
+;; projectile
+(use-package projectile
+  :bind ("C-c p" . projectile-command-map)
+  :config
+  (projectile-mode)
+  (setq projectile-completion-system 'ivy))
 
 ;; rainbow parens
 (use-package rainbow-delimiters
@@ -177,6 +152,10 @@
   (setq url-automatic-caching t)
   :bind ("C-c y" . 'youdao-dictionary-search-at-point))
 
+;; which key
+(use-package which-key
+  :config
+  (which-key-mode 1))
 
 (define-key key-translation-map (kbd "ESC") (kbd "C-g"))
 
@@ -197,17 +176,16 @@
   ("\\.sml\\'" . 'sml-mode)
   ("\\.lex\\'" . 'sml-lex-mode))
 
-;; ;; lsp
-;; (use-package lsp-mode
-;;   :hook
-;;   (python-mode . 'lsp-deferred)
-;;   (js-mode . 'lsp-deferred)
-;;   :commands lsp)
+;; lsp
+(use-package lsp-mode
+  :hook
+  (python-mode . 'lsp-deferred)
+  (js-mode . 'lsp-deferred)
+  :commands lsp)
 
-;; ;; optionally
-;; (use-package lsp-ui :commands lsp-ui-mode)
-;; (use-package company-lsp :commands company-lsp)
-;; (use-package lsp-treemacs :commands lsp-treemacs-errors-list)
+;; optionally
+(use-package lsp-ui :commands lsp-ui-mode)
+(use-package company-lsp :commands company-lsp)
 
 (provide 'init-packages)
 ;;; init-packages.el ends here
