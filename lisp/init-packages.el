@@ -106,10 +106,6 @@
   :hook (prog-mode . flycheck-mode))
 
 ;; git packages
-(use-package git-timemachine)
-(use-package gitconfig-mode)
-(use-package gitignore-mode)
-(use-package git-blamed)
 (use-package magit
   :bind ("C-x g". magit-status)
   :config (setenv "SSH_ASKPASS" "git-gui--askpass"))
@@ -121,6 +117,7 @@
 
 ;; neotree
 (use-package neotree
+  :defer 2
   :bind ("C-c n" . 'neotree-toggle)
   :config
   (setq neo-vc-integration nil)
