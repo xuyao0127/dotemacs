@@ -139,12 +139,7 @@
 ;; smartparens
 (use-package smartparens
   :hook
-  (prog-mode . smartparens-mode)
-  :custom
-  (sp-escape-quotes-after-insert nil)
-  :config
-  (show-smartparens-global-mode t)
-  (require 'smartparens-config))
+  (prog-mode . smartparens-mode))
 
 (use-package smex
   :bind ("M-x" . smex))

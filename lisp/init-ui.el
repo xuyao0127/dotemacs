@@ -31,9 +31,8 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 
 (global-hl-line-mode t)
+(setq-default display-line-numbers-width 4)
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
-;; (use-package nord-theme
-;;   :config
-;;   (load-theme 'nord t))
+
 (provide 'init-ui)
 ;;; init-ui.el ends here
