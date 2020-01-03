@@ -15,6 +15,7 @@
 ;; meaning) of any files you load.
 (setq-default indent-tabs-mode nil)   ;; don't use tabs to indent
 (setq-default tab-width 8)            ;; but maintain correct appearance
+(setq-default scroll-preserve-screen-position 'always)
 
 ;; Newline at end of file
 (setq require-final-newline t)
@@ -28,15 +29,10 @@
 (setq auto-save-file-name-transforms
       `((".*" ,temporary-file-directory t)))
 
-
-;; (require 'flyspell)
-;; (setq ispell-program-name "aspell" ; use aspell instead of ispell
-      ;; ispell-extra-args '("--sug-mode=ultra" "--lang=en_US"))
-;; (add-hook 'text-mode-hook 'flyspell-mode +1)
-;; (add-hook 'prog-mode-hook 'flyspell-prog-mode)
+(add-hook 'after-init-hook 'global-auto-revert-mode)
 
 ;; clean up obsolete buffers automatically
-;; (require 'midnight)
+(require 'midnight)
 
 (provide 'init-editor)
 ;;; init-editor.el ends here
