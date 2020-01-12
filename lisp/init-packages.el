@@ -1,19 +1,40 @@
 ;;; init-packages.el --- init repo and packages
 ;;; Commentary:
 ;;; Code:
-(setq package-enable-at-startup nil)
-(require 'package)
-(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 
-(package-initialize)
+;; bootstrap staright.el
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 5))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
+(straight-use-package 'use-package)
+(setq straight-use-package-by-default t)
 
-;; Bootstrap `use-package'
-(unless (package-installed-p 'use-package)
-    (package-refresh-contents)
-    (package-install 'use-package))
-(require 'use-package)
-(require 'use-package-ensure)
-(setq use-package-always-ensure t)
+;; dashboard
+(use-package dashboard
+  :config
+  (dashboard-setup-startup-hook)
+  (setq dashboard-set-init-info t)
+  (setq dashboard-startup-banner 1)
+  (setq dashboard-center-content t)
+  (setq dashboard-items '((recents  . 5)
+                        (bookmarks . 5)
+                        (projects . 5))))
+
+;; projectile
+(use-package projectile
+  :bind ("C-c p" . projectile-command-map)
+  :config
+  (projectile-mode)
+  (setq projectile-completion-system 'ivy))
 
 ;; winum
 (use-package winum
@@ -63,6 +84,9 @@
   (setq ivy-use-virtual-buffers t)
   (setq enable-recursive-minibuffers t))
 
+(use-package company-prescient)
+(use-package ivy-prescient)
+
 ;; neotree
 (use-package neotree
   :bind ("C-c n" . neotree-toggle)
@@ -95,7 +119,7 @@
   ;; Global settings (defaults)
   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
         doom-themes-enable-italic t) ; if nil, italics is universally disabled
-  (load-theme 'doom-one-light t)
+  (load-theme 'doom-nord t)
   ;; Enable flashing mode-line on errors
   (doom-themes-visual-bell-config))
 
@@ -117,13 +141,9 @@
   :config
   (global-hl-todo-mode 1))
 
-;; projectile
-(use-package projectile
-  :bind ("C-c p" . projectile-command-map)
-  :config
-  (projectile-mode)
-  (setq projectile-completion-system 'ivy))
-
+;; hungry delete
+(use-package hungry-delete
+  :config (global-hungry-delete-mode))
 ;; rainbow parens
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
@@ -132,16 +152,6 @@
 (use-package smartparens
   :hook
   (prog-mode . smartparens-mode))
-
-(use-package smex
-  :bind ("M-x" . smex))
-
-;; youdao dictionary
-(use-package youdao-dictionary
-  :defer t
-  :init
-  (setq url-automatic-caching t)
-  :bind ("C-c y" . 'youdao-dictionary-search-at-point))
 
 ;; which key
 (use-package which-key
@@ -160,23 +170,6 @@
 ;; racket
 (use-package racket-mode
   :mode "\\.rkt\\'")
-
-;; SML mode
-(use-package sml-mode
-  :mode
-  ("\\.sml\\'" . 'sml-mode)
-  ("\\.lex\\'" . 'sml-lex-mode))
-
-;; lsp
-(use-package lsp-mode
-  :hook
-  (python-mode . 'lsp-deferred)
-  (js-mode . 'lsp-deferred)
-  :commands lsp)
-
-;; optionally
-(use-package lsp-ui :commands lsp-ui-mode)
-(use-package company-lsp :commands company-lsp)
 
 (provide 'init-packages)
 ;;; init-packages.el ends here
