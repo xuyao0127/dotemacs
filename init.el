@@ -26,7 +26,6 @@
 
 ;; load modules
 (require 'init-packages)
-(require 'init-ui)
 (require 'init-editor)
 
 (provide 'init)
