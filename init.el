@@ -35,7 +35,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 122 :width normal :foundry "outline" :family "InputMonoCondensed"))))
+ '(default ((t (:inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 122 :width normal :foundry "outline" :family "JetBrains Mono"))))
  '(aw-leading-char-face ((t (:inherit ace-jump-face-foreground :height 3.0))))
  '(diff-hl-change ((t (:background "#3a81c3" :foreground "#3a81c3"))))
  '(diff-hl-delete ((t (:background "#ee6363" :foreground "#ee6363"))))
