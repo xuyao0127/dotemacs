@@ -171,9 +171,5 @@
 (use-package org-ref
   :init (setq org-ref-completion-library 'org-ref-ivy-cite))
 
-;; Daemon Mode
-(require 'server)
-(if (not (server-running-p)) (server-start))
-
 (provide 'init)
 ;;; init.el ends here
