@@ -1,51 +1,179 @@
-;;; init.el --- configuration entry point. -*- lexical-binding: t -*-
-
+;;; package --- Sumary
 ;;; Commentary:
-
-;; set up global settings and load other files.
-
 ;;; Code:
 
-;; Add 'lisp' folder into path.
-(add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
+;; Setup name and email for things like git
+(setq user-full-name "Yao Xu"
+      user-mail-address "syxuyao@outlook.com")
 
-(require 'init-benchmark)
+;; Set a larger gc
+(setq gc-cons-threshold 50000000)
+(setq large-file-warning-threshold 100000000)
 
-;; Adjust garbage collection thresholds during startup, and thereafter
-(let ((normal-gc-cons-threshold (* 200 1024 1024))
-      (init-gc-cons-threshold (* 1280 1024 1024)))
-  (setq gc-cons-threshold init-gc-cons-threshold)
-  (add-hook 'emacs-startup-hook
-            (lambda () (setq gc-cons-threshold normal-gc-cons-threshold))))
+;; Startup timer
+(add-hook 'emacs-startup-hook
+          (lambda ()
+            (message "Emacs ready in %s with %d garbage collections."
+                     (format "%.2f seconds"
+                             (float-time
+                              (time-subtract after-init-time before-init-time)))
+                     gcs-done)))
 
-(set-language-environment 'utf-8)
-(setq locale-coding-system 'utf-8)
-(set-default-coding-systems 'utf-8)
-(set-terminal-coding-system 'utf-8)
-(prefer-coding-system 'utf-8)
+;; setup package and use-package
+(require 'package)
+(setq package-enable-at-startup nil)
+(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
+(add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
+(add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/"))
+(package-initialize)
 
-;; load modules
-(require 'init-packages)
-(require 'init-editor)
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+
+(eval-when-compile
+  (require 'use-package))
+(setq use-package-always-ensure t)
+
+;; Visual setup
+(use-package doom-themes
+  :config
+  ;; Global settings (defaults)
+  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+        doom-themes-enable-italic t) ; if nil, italics is universally disabled
+  (load-theme 'doom-nord t)
+  ;; Enable flashing mode-line on errors
+  (doom-themes-visual-bell-config)
+  ;; Corrects (and improves) org-mode's native fontification.
+  (doom-themes-org-config))
+(use-package doom-modeline
+  :ensure t
+  :init (doom-modeline-mode 1))
+(toggle-scroll-bar -1)
+(tool-bar-mode -1)
+(blink-cursor-mode -1)
+(global-hl-line-mode +1)
+(line-number-mode +1)
+(global-display-line-numbers-mode 1)
+(column-number-mode t)
+(size-indication-mode t)
+(use-package winum
+  :config (winum-mode))
+
+;; disable startup screen
+(setq inhibit-startup-screen t)
+
+;; show full path name in modeline
+(setq frame-title-format
+      '((:eval (if (buffer-file-name)
+       (abbreviate-file-name (buffer-file-name))
+       "%b"))))
+
+;; Scrolling
+(setq scroll-margin 0
+      scroll-conservatively 100000
+      scroll-preserve-screen-position 1)
+
+;; Font
+(set-frame-font "Sarasa Fixed SC 14" nil t)
+
+;; Put backup files in temp folder
+(setq backup-directory-alist
+      `((".*" . ,temporary-file-directory)))
+(setq auto-save-file-name-transforms
+      `((".*" ,temporary-file-directory t)))
+
+;; Store custom-file separately, don't freak out when it's not found.
+
+(setq custom-file "~/.emacs.d/custom.el")
+(load custom-file 'noerror)
+
+;; Ease of life
+(recentf-mode 1)
+(fset 'yes-or-no-p 'y-or-n-p)
+(global-auto-revert-mode t)
+(setq-default tab-width 4
+              indent-tabs-mode nil)
+(add-hook 'before-save-hook 'whitespace-cleanup)
+
+;; smartparens
+(use-package rainbow-delimiters
+  :hook (prog-mode . rainbow-delimiters-mode))
+(use-package smartparens
+  :diminish smartparens-mode
+  :config
+  (progn
+    (require 'smartparens-config)
+    (smartparens-global-mode 1)
+    (show-paren-mode t)))
+
+(use-package expand-region
+  :bind ("C-=" . er/expand-region))
+
+(use-package which-key
+  :diminish which-key-mode
+  :config
+  (which-key-mode +1))
+
+(use-package avy
+  :bind
+  ("M-s" . avy-goto-char)
+  :config
+  (setq avy-background t))
+
+(use-package company
+  :diminish company-mode
+  :config
+  (add-hook 'after-init-hook #'global-company-mode))
+
+(use-package flycheck
+  :diminish flycheck-mode
+  :config
+  (add-hook 'after-init-hook #'global-flycheck-mode))
+
+(use-package magit
+  :bind (("C-M-g" . magit-status)))
+
+;; Swiper/Ivy/Counsel combo
+(use-package counsel
+  :init
+  (counsel-mode 1)
+  :bind
+  (("M-y" . counsel-yank-pop)
+   :map ivy-minibuffer-map
+   ("M-y" . ivy-next-line)))
+
+(use-package ivy
+  :bind (("C-x b" . ivy-switch-buffer))
+  :config
+  (ivy-mode 1)
+  (setq ivy-use-virtual-buffers t)
+  (setq ivy-display-style 'fancy))
+
+(use-package swiper
+  :bind
+  (("C-s" . swiper)
+   ("C-r" . swiper)
+   ("C-c C-r" . ivy-resume)
+   ("C-x C-f" . counsel-find-file))
+  :config
+  (ivy-mode 1)
+  (setq ivy-use-virtual-buffers t)
+  (setq enable-recursive-minibuffers t))
+
+;; Yasnippet
+(use-package yasnippet
+  :config
+  (yas-global-mode 1)
+  (use-package yasnippet-snippets))
+
+;; org mode
+(use-package org-ref
+  :init (setq org-ref-completion-library 'org-ref-ivy-cite))
+
+;; Daemon Mode
+(require 'server)
+(if (not (server-running-p)) (server-start))
 
 (provide 'init)
 ;;; init.el ends here
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(default ((t (:inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 122 :width normal :foundry "outline" :family "JetBrains Mono"))))
- '(aw-leading-char-face ((t (:inherit ace-jump-face-foreground :height 3.0))))
- '(diff-hl-change ((t (:background "#3a81c3" :foreground "#3a81c3"))))
- '(diff-hl-delete ((t (:background "#ee6363" :foreground "#ee6363"))))
- '(diff-hl-insert ((t (:background "#7ccd7c" :foreground "#7ccd7c")))))
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   (quote
-    (dired-sidebar magit git-blamed gitignore-mode gitconfig-mode git-timemachine youdao-dictionary which-key use-package undo-tree sml-mode smex smartparens rainbow-delimiters racket-mode projectile neotree minions lsp-ui hl-todo flycheck expand-region doom-themes doom-modeline diff-hl counsel company-lsp ace-window)))
- '(sp-escape-quotes-after-insert nil))
