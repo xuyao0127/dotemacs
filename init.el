@@ -7,7 +7,7 @@
       user-mail-address "syxuyao@outlook.com")
 
 ;; Set a larger gc
-(setq gc-cons-threshold 50000000)
+(setq gc-cons-threshold 500000000)
 (setq large-file-warning-threshold 100000000)
 
 ;; Startup timer
@@ -41,7 +41,7 @@
   ;; Global settings (defaults)
   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
         doom-themes-enable-italic t) ; if nil, italics is universally disabled
-  (load-theme 'doom-nord t)
+  (load-theme 'doom-gruvbox t)
   ;; Enable flashing mode-line on errors
   (doom-themes-visual-bell-config)
   ;; Corrects (and improves) org-mode's native fontification.
@@ -75,7 +75,8 @@
       scroll-preserve-screen-position 1)
 
 ;; Font
-(set-frame-font "Sarasa Fixed SC 14" nil t)
+(add-to-list 'default-frame-alist '(font . "Sarasa Fixed SC 14"))
+;; (set-frame-font "Sarasa Fixed SC 14" nil t)
 
 ;; Put backup files in temp folder
 (setq backup-directory-alist
@@ -90,11 +91,15 @@
 
 ;; Ease of life
 (recentf-mode 1)
+(delete-selection-mode 1)
 (fset 'yes-or-no-p 'y-or-n-p)
 (global-auto-revert-mode t)
 (setq-default tab-width 4
               indent-tabs-mode nil)
 (add-hook 'before-save-hook 'whitespace-cleanup)
+(use-package smex
+  :ensure t
+  :bind ("M-x" . smex))
 
 ;; smartparens
 (use-package rainbow-delimiters
@@ -169,7 +174,20 @@
 
 ;; org mode
 (use-package org-ref
-  :init (setq org-ref-completion-library 'org-ref-ivy-cite))
+  :after org
+  :init
+  (setq org-ref-completion-library 'org-ref-ivy-cite)
+  (setq reftex-default-bibliography '("~/CloudStation/bib/references.bib"))
+  (setq org-ref-default-bibliography '("~/Dropbox/bibliography/library.bib"))
+  :config
+  (setq org-latex-pdf-process
+      '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+        "bibtex %b"
+        "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+        "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f")))
+
+(require 'server)
+(if (not (server-running-p)) (server-start))
 
 (provide 'init)
 ;;; init.el ends here
